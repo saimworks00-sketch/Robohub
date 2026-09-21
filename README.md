@@ -82,6 +82,6 @@ All sample content is at the top of `script.js`: `SAMPLE_PROJECTS`, `EVENTS` and
 
 ## Author
 
-**Name:** _Your name here_
-**GitHub:** _https://github.com/your-username_
-**Email / LinkedIn:** _optional_
+Name: MD SAIM MIA
+GitHub: https://github.com/saimworks00-sketch
+Email: saimmia007@gmail.com
