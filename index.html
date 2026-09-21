@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RoboHub — Smart Engineering Campus</title>
+  <meta name="description" content="RoboHub is a project-discovery and community platform for engineering students: explore projects, join events and find learning resources.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
+
+  <!-- Fonts load from Google Fonts. If you are offline, the fallback system fonts in style.css are used. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Apply the saved theme before the page paints, so there is no light/dark flash. -->
+  <script>
+    (function () {
+      var theme = "light";
+      try {
+        var saved = localStorage.getItem("robohub:theme");
+        if (saved === "light" || saved === "dark") {
+          theme = saved;
+        } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+          theme = "dark";
+        }
+      } catch (error) { /* storage blocked: keep the default */ }
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <!-- Icon sprite: icons are drawn once here and reused with <use href="#i-name"> -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="logo-mark" viewBox="0 0 32 32">
+        <rect width="32" height="32" rx="9" style="fill:var(--brand)"/>
+        <path d="M8 22V10h7a4 4 0 0 1 0 8H8m7 0 5 4" style="fill:none;stroke:var(--on-brand);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round"/>
+        <circle cx="23.5" cy="9.5" r="2.6" style="fill:var(--accent)"/>
+      </symbol>
+      <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></symbol>
+      <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></symbol>
+      <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></symbol>
+      <symbol id="i-book" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></symbol>
+      <symbol id="i-folder" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></symbol>
+      <symbol id="i-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+      <symbol id="i-users" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+      <symbol id="i-layers" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></symbol>
+      <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></symbol>
+      <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></symbol>
+      <symbol id="i-menu" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></symbol>
+      <symbol id="i-x" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></symbol>
+      <symbol id="i-github" viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></symbol>
+      <symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></symbol>
+      <symbol id="i-pin" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+      <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></symbol>
+      <symbol id="i-arrow-right" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></symbol>
+      <symbol id="i-cpu" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></symbol>
+      <symbol id="i-wifi" viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></symbol>
+      <symbol id="i-code" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></symbol>
+      <symbol id="i-terminal" viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></symbol>
+      <symbol id="i-git" viewBox="0 0 24 24"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></symbol>
+      <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></symbol>
+    </defs>
+  </svg>
+
+  <div class="app">
+    <div class="scrim" id="scrim" hidden></div>
+
+    <!-- ============ Sidebar ============ -->
+    <aside class="sidebar" id="sidebar" aria-label="Sidebar">
+      <div class="sidebar-head">
+        <a class="brand" href="#dashboard" aria-label="RoboHub, go to dashboard">
+          <svg class="logo" aria-hidden="true" focusable="false"><use href="#logo-mark"></use></svg>
+          <span class="brand-name">RoboHub</span>
+        </a>
+        <button class="icon-btn sidebar-close" type="button" data-action="close-menu" aria-label="Close menu">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg>
+        </button>
+      </div>
+
+      <nav aria-label="Main">
+        <ul class="nav-list">
+          <li><a class="nav-link" href="#dashboard" data-route="dashboard"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-home"></use></svg><span>Dashboard</span></a></li>
+          <li><a class="nav-link" href="#projects" data-route="projects"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-compass"></use></svg><span>Explore Projects</span></a></li>
+          <li><a class="nav-link" href="#events" data-route="events"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-calendar"></use></svg><span>Events</span></a></li>
+          <li><a class="nav-link" href="#resources" data-route="resources"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-book"></use></svg><span>Resources</span></a></li>
+          <li><a class="nav-link" href="#my-projects" data-route="my-projects"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-folder"></use></svg><span>My Projects</span><span class="nav-count" id="navMineCount" hidden></span></a></li>
+          <li><a class="nav-link" href="#profile" data-route="profile"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-user"></use></svg><span>Profile</span></a></li>
+        </ul>
+      </nav>
+
+      <div class="sidebar-cta">
+        <p class="sidebar-cta-title">Building something?</p>
+        <p class="sidebar-cta-text">Add it to My Projects to keep track of it and show it to others.</p>
+        <button class="btn btn-primary btn-block" type="button" data-action="open-add-project">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+          <span>Add a project</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- ============ Main column ============ -->
+    <div class="app-main" id="appMain">
+      <header class="topbar">
+        <button class="icon-btn menu-btn" id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="sidebar">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-menu"></use></svg>
+        </button>
+
+        <a class="brand brand-compact" href="#dashboard" aria-label="RoboHub, go to dashboard">
+          <svg class="logo" aria-hidden="true" focusable="false"><use href="#logo-mark"></use></svg>
+          <span class="brand-name">RoboHub</span>
+        </a>
+
+        <form class="search search-global" role="search" id="globalSearchForm">
+          <label class="sr-only" for="globalSearch">Search projects</label>
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-search"></use></svg>
+          <input id="globalSearch" type="search" placeholder="Search projects, technologies or authors" autocomplete="off">
+        </form>
+
+        <div class="topbar-actions">
+          <button class="icon-btn theme-toggle" id="themeToggle" type="button" aria-label="Dark mode" aria-pressed="false">
+            <svg class="icon icon-moon" aria-hidden="true" focusable="false"><use href="#i-moon"></use></svg>
+            <svg class="icon icon-sun" aria-hidden="true" focusable="false"><use href="#i-sun"></use></svg>
+          </button>
+          <a class="avatar" href="#profile" aria-label="Your profile"><span data-avatar>S</span></a>
+        </div>
+      </header>
+
+      <main class="content" id="main">
+
+        <!-- ========== Dashboard ========== -->
+        <section class="view" data-view="dashboard" aria-labelledby="dashboard-title" hidden>
+          <div class="hero">
+            <div class="hero-copy">
+              <h1 id="dashboard-title" tabindex="-1">Welcome back, <span data-user-name>Student</span></h1>
+              <p class="hero-text">Discover student-built robotics, IoT and AI projects, join campus events, and share what you are building.</p>
+              <div class="hero-actions">
+                <a class="btn btn-light" href="#projects">Explore projects</a>
+                <button class="btn btn-ghost-light" type="button" data-action="open-add-project">Add your project</button>
+              </div>
+            </div>
+
+            <!-- Circuit drawing: the traces draw once on load, then a signal reaches the chip. -->
+            <svg class="hero-art" viewBox="0 0 480 260" aria-hidden="true" focusable="false">
+              <g class="traces" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path class="trace" style="--i:0" pathLength="1" d="M0 40 H80 L120 80 H200"/>
+                <path class="trace" style="--i:1" pathLength="1" d="M0 130 H200"/>
+                <path class="trace" style="--i:2" pathLength="1" d="M0 220 H80 L120 180 H200"/>
+                <path class="trace" style="--i:3" pathLength="1" d="M300 80 H360 L400 40 H480"/>
+                <path class="trace" style="--i:4" pathLength="1" d="M300 130 H400 L430 160 H480"/>
+                <path class="trace" style="--i:5" pathLength="1" d="M300 180 H360 L400 220 H480"/>
+                <path class="pulse" pathLength="1" d="M0 130 H200"/>
+              </g>
+              <rect class="chip" x="200" y="50" width="100" height="160" rx="16"/>
+              <rect class="chip-inner" x="224" y="78" width="52" height="104" rx="8"/>
+              <circle class="node" cx="250" cy="130" r="8"/>
+            </svg>
+          </div>
+
+          <ul class="stats" aria-label="Campus overview">
+            <li class="stat">
+              <span class="stat-icon" aria-hidden="true"><svg class="icon"><use href="#i-layers"></use></svg></span>
+              <div><p class="stat-value" data-stat="projects">0</p><p class="stat-label">Total projects</p></div>
+            </li>
+            <li class="stat">
+              <span class="stat-icon" aria-hidden="true"><svg class="icon"><use href="#i-users"></use></svg></span>
+              <div><p class="stat-value" data-stat="students">0</p><p class="stat-label">Active students</p></div>
+            </li>
+            <li class="stat">
+              <span class="stat-icon" aria-hidden="true"><svg class="icon"><use href="#i-calendar"></use></svg></span>
+              <div><p class="stat-value" data-stat="events">0</p><p class="stat-label">Upcoming events</p></div>
+            </li>
+            <li class="stat">
+              <span class="stat-icon" aria-hidden="true"><svg class="icon"><use href="#i-book"></use></svg></span>
+              <div><p class="stat-value" data-stat="resources">0</p><p class="stat-label">Resources</p></div>
+            </li>
+          </ul>
+
+          <section class="section" aria-labelledby="featured-title">
+            <div class="section-head">
+              <h2 id="featured-title">Featured projects</h2>
+              <a class="link" href="#projects">View all projects</a>
+            </div>
+            <div class="card-grid" id="featuredGrid"></div>
+          </section>
+
+          <div class="two-col">
+            <section class="panel" aria-labelledby="dash-events-title">
+              <div class="section-head">
+                <h2 id="dash-events-title">Upcoming events</h2>
+                <a class="link" href="#events">All events</a>
+              </div>
+              <ul class="mini-list" id="dashEvents"></ul>
+            </section>
+
+            <section class="panel" aria-labelledby="dash-resources-title">
+              <div class="section-head">
+                <h2 id="dash-resources-title">Recommended resources</h2>
+                <a class="link" href="#resources">All resources</a>
+              </div>
+              <p class="section-sub" id="recoHint"></p>
+              <ul class="mini-list" id="dashResources"></ul>
+            </section>
+          </div>
+        </section>
+
+        <!-- ========== Explore Projects ========== -->
+        <section class="view" data-view="projects" aria-labelledby="projects-title" hidden>
+          <header class="page-head">
+            <h1 id="projects-title" tabindex="-1">Explore projects</h1>
+            <p>Search student work by keyword, or filter by category.</p>
+          </header>
+
+          <div class="toolbar">
+            <div class="search search-inline">
+              <label class="sr-only" for="projectSearch">Search projects</label>
+              <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-search"></use></svg>
+              <input id="projectSearch" type="search" placeholder="Search projects" autocomplete="off">
+            </div>
+            <div class="chips" id="categoryFilters" role="group" aria-label="Filter by category"></div>
+          </div>
+
+          <p class="result-count" id="resultCount" role="status"></p>
+
+          <div class="card-grid" id="projectGrid"></div>
+
+          <div class="empty-state" id="emptyState" hidden>
+            <span class="empty-icon" aria-hidden="true"><svg class="icon"><use href="#i-search"></use></svg></span>
+            <p class="empty-text"><strong>No projects found.</strong> Try another keyword or category.</p>
+            <button class="btn btn-secondary" type="button" data-action="clear-filters">Clear search and filters</button>
+          </div>
+        </section>
+
+        <!-- ========== Events ========== -->
+        <section class="view" data-view="events" aria-labelledby="events-title" hidden>
+          <header class="page-head">
+            <h1 id="events-title" tabindex="-1">Events</h1>
+            <p>Workshops, bootcamps and talks on campus. Register to save your seat.</p>
+          </header>
+          <ul class="event-list" id="eventList"></ul>
+        </section>
+
+        <!-- ========== Resources ========== -->
+        <section class="view" data-view="resources" aria-labelledby="resources-title" hidden>
+          <header class="page-head">
+            <h1 id="resources-title" tabindex="-1">Resources</h1>
+            <p>Pick a topic to see where to start and where to read more.</p>
+          </header>
+          <div class="card-grid card-grid-top" id="resourceGrid"></div>
+        </section>
+
+        <!-- ========== My Projects ========== -->
+        <section class="view" data-view="my-projects" aria-labelledby="mine-title" hidden>
+          <header class="page-head page-head-row">
+            <div>
+              <h1 id="mine-title" tabindex="-1">My projects</h1>
+              <p>Your own projects and the ones you saved. Everything is stored in this browser only.</p>
+            </div>
+            <button class="btn btn-primary" type="button" data-action="open-add-project">
+              <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+              <span>Add project</span>
+            </button>
+          </header>
+
+          <section class="section" aria-labelledby="own-title">
+            <h2 id="own-title">Your projects</h2>
+            <div class="card-grid" id="ownGrid"></div>
+            <div class="empty-state empty-state-sm" id="ownEmpty" hidden>
+              <p class="empty-text"><strong>No projects yet.</strong> Add one to see it here and in Explore projects.</p>
+              <button class="btn btn-secondary" type="button" data-action="open-add-project">Add your first project</button>
+            </div>
+          </section>
+
+          <section class="section" aria-labelledby="saved-title">
+            <h2 id="saved-title">Saved projects</h2>
+            <div class="card-grid" id="savedGrid"></div>
+            <div class="empty-state empty-state-sm" id="savedEmpty" hidden>
+              <p class="empty-text"><strong>Nothing saved yet.</strong> Use the bookmark on a project card to keep it here.</p>
+              <a class="btn btn-secondary" href="#projects">Explore projects</a>
+            </div>
+          </section>
+        </section>
+
+        <!-- ========== Profile ========== -->
+        <section class="view" data-view="profile" aria-labelledby="profile-title" hidden>
+          <header class="page-head">
+            <h1 id="profile-title" tabindex="-1">Profile</h1>
+            <p>Update how you appear in RoboHub and choose topics for your recommendations.</p>
+          </header>
+
+          <div class="profile-layout">
+            <form class="panel profile-form" id="profileForm" novalidate>
+              <div class="profile-id">
+                <span class="avatar avatar-lg" aria-hidden="true"><span data-avatar>S</span></span>
+                <div>
+                  <p class="profile-name" data-user-name>Student</p>
+                  <p class="profile-role">Engineering student</p>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="displayName">Display name</label>
+                <input id="displayName" name="displayName" type="text" maxlength="30" autocomplete="name" aria-describedby="displayName-error">
+                <p class="field-error" id="displayName-error" hidden></p>
+              </div>
+
+              <fieldset class="field">
+                <legend>Your interests</legend>
+                <p class="field-hint" id="interestsHint">Recommended resources on the dashboard follow the topics you choose.</p>
+                <div class="chips" id="interestOptions" aria-describedby="interestsHint"></div>
+              </fieldset>
+
+              <button class="btn btn-primary" type="submit">Save profile</button>
+            </form>
+
+            <div class="profile-side">
+              <section class="panel" aria-labelledby="appearance-title">
+                <h2 id="appearance-title">Appearance</h2>
+                <div class="segmented" role="radiogroup" aria-label="Theme">
+                  <label class="segment"><input type="radio" name="theme" value="light"><span>Light</span></label>
+                  <label class="segment"><input type="radio" name="theme" value="dark"><span>Dark</span></label>
+                </div>
+              </section>
+
+              <section class="panel" aria-labelledby="activity-title">
+                <h2 id="activity-title">Your activity</h2>
+                <dl class="activity">
+                  <div><dt>Projects added</dt><dd data-activity="own">0</dd></div>
+                  <div><dt>Projects saved</dt><dd data-activity="saved">0</dd></div>
+                  <div><dt>Events registered</dt><dd data-activity="events">0</dd></div>
+                </dl>
+              </section>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <footer class="site-footer">
+        <p>RoboHub is a frontend prototype. Projects, events and student numbers are sample data, and nothing is sent to a server. Your theme, saved projects and registrations stay in this browser.</p>
+      </footer>
+    </div>
+  </div>
+
+  <!-- ============ Project details dialog ============ -->
+  <dialog class="dialog" id="projectDialog" aria-labelledby="projectDialogTitle">
+    <button class="icon-btn dialog-close" type="button" data-action="close-dialog" aria-label="Close project details">
+      <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg>
+    </button>
+    <div class="dialog-scroll" id="projectDialogBody"></div>
+  </dialog>
+
+  <!-- ============ Add project dialog ============ -->
+  <dialog class="dialog dialog-form" id="addDialog" aria-labelledby="addDialogTitle">
+    <button class="icon-btn dialog-close" type="button" data-action="close-dialog" aria-label="Close add project form">
+      <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg>
+    </button>
+    <form class="dialog-scroll dialog-pad" id="addForm" novalidate>
+      <h2 class="dialog-title" id="addDialogTitle">Add a project</h2>
+      <p class="dialog-lead">Share what you are building. It is saved in this browser only.</p>
+
+      <div class="field">
+        <label for="projectName">Project name</label>
+        <input id="projectName" name="name" type="text" maxlength="60" autofocus aria-describedby="projectName-error">
+        <p class="field-error" id="projectName-error" hidden></p>
+      </div>
+
+      <div class="field">
+        <label for="projectCategory">Category</label>
+        <select id="projectCategory" name="category"></select>
+      </div>
+
+      <div class="field">
+        <label for="projectTech">Technologies</label>
+        <input id="projectTech" name="tech" type="text" placeholder="Arduino, Python, HTML" aria-describedby="projectTech-hint projectTech-error">
+        <p class="field-hint" id="projectTech-hint">Separate technologies with commas.</p>
+        <p class="field-error" id="projectTech-error" hidden></p>
+      </div>
+
+      <div class="field">
+        <label for="projectDescription">Short description</label>
+        <textarea id="projectDescription" name="description" rows="3" maxlength="200" aria-describedby="projectDescription-error"></textarea>
+        <p class="field-error" id="projectDescription-error" hidden></p>
+      </div>
+
+      <div class="field">
+        <label for="projectGithub">GitHub link <span class="optional">(optional)</span></label>
+        <input id="projectGithub" name="github" type="url" placeholder="https://github.com/you/your-project" aria-describedby="projectGithub-error">
+        <p class="field-error" id="projectGithub-error" hidden></p>
+      </div>
+
+      <div class="dialog-actions">
+        <button class="btn btn-quiet" type="button" data-action="close-dialog">Cancel</button>
+        <button class="btn btn-primary" type="submit">Add project</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Toast messages appear here -->
+  <div class="toast-region" id="toastRegion" role="status" aria-live="polite"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
